@@ -13,7 +13,10 @@ let editFlag = false;
 let editId = "";
 
 // ****** EVENT LISTENERS **********
+// submit form
 form.addEventListener('submit', addItem);
+// clear items
+clearBtn.addEventListener('click', clearItems);
 
 // ****** FUNCTIONS **********
 function addItem(e) {
@@ -32,7 +35,31 @@ console.log();
 
   // short if statement
   if (value && !editFlag) {
-
+    const element = document.createElement('article');
+    element.classList.add('grocery-item');
+    // add id
+    const attr = document.createAttribute('data-id');
+    attr.value = id;
+    element.setAttributeNode(attr);
+    element.innerHTML = `<p class="title">${value}</p>
+    <div class="btn-container">
+      <button type="button" class="edit-btn">
+        <img src="./img/edit-24.png">
+      </button>
+      <button type="button" class="delete-btn">
+        <img src="./img/delete-24.png">
+      </button>
+    </div>`;
+    // append child
+    list.appendChild(element);
+    // display alert
+    displayAlert('item added to the list', 'success');
+    // show container
+    container.classList.add('show-container');
+    // add to local storage
+    addToLocalStorage(id, value);
+    // set back to default
+    setBackToDefault();
   } else if (value && editFlag) {
 
   } else {
@@ -51,6 +78,27 @@ function displayAlert(text, action) {
     alert.classList.remove(`alert-${action}`);
   }, 1000);
 }
+function setBackToDefault() {
+  grocery.value = '';
+  editFlag = false;
+  editId = '';
+  submitBtn.textContent = 'submit';
+}
+// clear items
+function clearItems() {
+  const items = document.querySelectorAll('.grocery-item');
+  if (items.length > 0) {
+    items.forEach(function (item) {
+      list.removeChild(item);
+    });
+  }
+  container.classList.remove('show-container');
+  displayAlert('empty list', 'danger');
+  setBackToDefault();
+  // localStorage.removeItem('list');
+}
 // ****** LOCAL STORAGE **********
-
+function addToLocalStorage(id, value) {
+  console.log('added to local storage');
+}
 // ****** SETUP ITEMS **********
