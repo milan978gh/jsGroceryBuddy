@@ -103,6 +103,12 @@ function editItem(e) {
   submitBtn.textContent = 'edit';
 }
 
+// check btn
+function checkBtn(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+
+}
+
 // clear items
 function clearItems() {
   const items = document.querySelectorAll('.grocery-item');
@@ -167,7 +173,7 @@ function createListItem(id, value) {
   const attr = document.createAttribute('data-id');
   attr.value = id;
   element.setAttributeNode(attr);
-  element.innerHTML = `<p class="title">${value}</p>
+  /*element.innerHTML = `<p class="title">${value}</p>
           <div class="btn-container">
             <button type="button" class="edit-btn">
               <img src="./img/edit-24.png">
@@ -175,11 +181,27 @@ function createListItem(id, value) {
             <button type="button" class="delete-btn">
               <img src="./img/delete-24.png">
             </button>
-          </div>`;
+          </div>`;*/
+  element.innerHTML = `<div class="btn-container">
+          <button type="button" class="check-btn">
+            <img src="./img/checkBox-24.png">
+          </button>
+        </div>
+        <p class="title">item</p>
+        <div class="btn-container">
+          <button type="button" class="edit-btn">
+            <img src="./img/edit-24.png">
+          </button>
+          <button type="button" class="delete-btn">
+            <img src="./img/delete-24.png">
+          </button>
+        </div>`;
   const deleteBtn = element.querySelector('.delete-btn');
   const editBtn = element.querySelector('.edit-btn');
+  const checkBtn = element.querySelector('.check-btn');
   deleteBtn.addEventListener('click', deleteItem);
   editBtn.addEventListener('click', editItem);
+  checkBtn.addEventListener('click', checkItem);
   // append child
   list.appendChild(element);
 }

@@ -281,7 +281,8 @@ Grocery List
   transition: var(--transition);
 }
 .edit-btn,
-.delete-btn {
+.delete-btn,
+.check-btn {
   background: transparent;
   border-color: transparent;
   cursor: pointer;
