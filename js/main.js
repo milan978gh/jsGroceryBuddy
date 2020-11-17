@@ -17,6 +17,8 @@ let editId = "";
 form.addEventListener('submit', addItem);
 // clear items
 clearBtn.addEventListener('click', clearItems);
+// load items from local storage
+window.addEventListener('DOMContentLoaded', setupItems);
 
 // ****** FUNCTIONS **********
 function addItem(e) {
@@ -35,23 +37,7 @@ console.log();
 
   // short if statement
   if (value && !editFlag) {
-    const element = document.createElement('article');
-    element.classList.add('grocery-item');
-    // add id
-    const attr = document.createAttribute('data-id');
-    attr.value = id;
-    element.setAttributeNode(attr);
-    element.innerHTML = `<p class="title">${value}</p>
-    <div class="btn-container">
-      <button type="button" class="edit-btn">
-        <img src="./img/edit-24.png">
-      </button>
-      <button type="button" class="delete-btn">
-        <img src="./img/delete-24.png">
-      </button>
-    </div>`;
-    // append child
-    list.appendChild(element);
+    createListItem(id, value);
     // display alert
     displayAlert('item added to the list', 'success');
     // show container
@@ -61,7 +47,11 @@ console.log();
     // set back to default
     setBackToDefault();
   } else if (value && editFlag) {
-
+    editElement.innerHTML = value;
+    displayAlert('item edited', 'success');
+    // edit local storage
+    editLocalStorage(editId, value);
+    setBackToDefault();
   } else {
     displayAlert('please, enter value', 'danger');
   }
@@ -78,12 +68,41 @@ function displayAlert(text, action) {
     alert.classList.remove(`alert-${action}`);
   }, 1000);
 }
+
+// set back default
 function setBackToDefault() {
   grocery.value = '';
   editFlag = false;
   editId = '';
   submitBtn.textContent = 'submit';
 }
+
+// delete btn
+function deleteItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  const id = element.dataset.id;
+  list.removeChild(element);
+  if (list.children.length === 0) {
+    container.classList.remove('show-container');
+  }
+  displayAlert('item deleted', 'danger');
+  setBackToDefault();
+  // remove from local storage
+  removeFromLocalStorage(id);
+}
+
+// edit btn
+function editItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  // set edit item
+  editElement = e.currentTarget.parentElement.previousElementSibling;
+  // set form value
+  grocery.value = editElement.innerHTML;
+  editFlag = true;
+  editId = element.dataset.id;
+  submitBtn.textContent = 'edit';
+}
+
 // clear items
 function clearItems() {
   const items = document.querySelectorAll('.grocery-item');
@@ -95,10 +114,72 @@ function clearItems() {
   container.classList.remove('show-container');
   displayAlert('empty list', 'danger');
   setBackToDefault();
-  // localStorage.removeItem('list');
+  localStorage.removeItem('list');
 }
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {
-  console.log('added to local storage');
+  const grocery = { id: id, value: value };
+  let items = getLocalStorage();
+  items.push(grocery);
+  localStorage.setItem('list', JSON.stringify(items));
 }
+
+function removeFromLocalStorage(id) {
+  let items = getLocalStorage();
+  items = items.filter(function (item) {
+    if (item.id !== id) {
+      return item;
+    }
+  });
+  localStorage.setItem('list', JSON.stringify(items));
+}
+
+function editLocalStorage(id, value) {
+  let items = getLocalStorage();
+  items = items.map(function (item) {
+    if (item.id === id) {
+      item.value = value;
+    }
+    return item;
+  });
+  localStorage.setItem('list', JSON.stringify(items));
+}
+
+function getLocalStorage() {
+  return localStorage.getItem('list') ? JSON.parse(localStorage.getItem('list')) : [];
+}
+
 // ****** SETUP ITEMS **********
+function setupItems() {
+  let items = getLocalStorage();
+  if (items.length > 0) {
+    items.forEach(function (item) {
+      createListItem(item.id, item.value);
+    });
+    container.classList.add('show-container');
+  }
+}
+
+function createListItem(id, value) {
+  const element = document.createElement('article');
+  element.classList.add('grocery-item');
+  // add id
+  const attr = document.createAttribute('data-id');
+  attr.value = id;
+  element.setAttributeNode(attr);
+  element.innerHTML = `<p class="title">${value}</p>
+          <div class="btn-container">
+            <button type="button" class="edit-btn">
+              <img src="./img/edit-24.png">
+            </button>
+            <button type="button" class="delete-btn">
+              <img src="./img/delete-24.png">
+            </button>
+          </div>`;
+  const deleteBtn = element.querySelector('.delete-btn');
+  const editBtn = element.querySelector('.edit-btn');
+  deleteBtn.addEventListener('click', deleteItem);
+  editBtn.addEventListener('click', editItem);
+  // append child
+  list.appendChild(element);
+}

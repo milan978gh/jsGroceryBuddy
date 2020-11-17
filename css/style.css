@@ -38,7 +38,7 @@ Variables
   --clr-black: #222;
   --ff-primary: Georgia, serif;
   --ff-secondary: Tahoma, sans-serif;
-  --transition: all 0.3s linear;
+  --transition: all 0.2s linear;
   --spacing: 0.25rem;
   --radius: 0.5rem;
   --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -265,13 +265,14 @@ Grocery List
   padding: 0.25rem 1rem;
   border-radius: var(--radius);
   text-transform: capitalize;
+  background-color: var(--clr-grey-9);
 }
 .grocery-item:hover {
-  color: var(--clr-grey-5);
+  color: var(--clr-grey-1);
   background: var(--clr-grey-10);
 }
 .grocery-item:hover .title {
-  color: var(--clr-grey-5);
+  color: var(--clr-grey-1);
 }
 .title {
   margin-bottom: 0;
@@ -284,7 +285,6 @@ Grocery List
   background: transparent;
   border-color: transparent;
   cursor: pointer;
-  font-size: 0.7rem;
   margin: 0 0.15rem;
   transition: var(--transition);
 }
