@@ -107,6 +107,7 @@ function editItem(e) {
 function checkBtn(e) {
   const element = e.currentTarget.parentElement.parentElement;
 
+  // classList.toggle('.checked-text');
 }
 
 // clear items

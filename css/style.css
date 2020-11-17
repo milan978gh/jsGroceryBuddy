@@ -289,7 +289,7 @@ Grocery List
   margin: 0 0.15rem;
   transition: var(--transition);
 }
-.edit-btn {
+/*.edit-btn {
   color: var(--clr-green-light);
 }
 .edit-btn:hover {
@@ -300,6 +300,9 @@ Grocery List
 }
 .delete-btn:hover {
   color: var(--clr-red-dark);
+}*/
+.checked-text{
+  text-decoration: line-through;
 }
 .clear-btn {
   text-transform: capitalize;
