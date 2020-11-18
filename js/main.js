@@ -104,10 +104,9 @@ function editItem(e) {
 }
 
 // check btn
-function checkBtn(e) {
-  const element = e.currentTarget.parentElement.parentElement;
-
-  // classList.toggle('.checked-text');
+function checkItem(e) {
+  const element = e.currentTarget.parentElement.nextElementSibling;
+  element.classList.toggle('checked-text');
 }
 
 // clear items
@@ -188,7 +187,7 @@ function createListItem(id, value) {
             <img src="./img/checkBox-24.png">
           </button>
         </div>
-        <p class="title">item</p>
+        <p class="title">${value}</p>
         <div class="btn-container">
           <button type="button" class="edit-btn">
             <img src="./img/edit-24.png">
