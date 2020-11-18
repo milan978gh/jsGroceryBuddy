@@ -286,21 +286,10 @@ Grocery List
   background: transparent;
   border-color: transparent;
   cursor: pointer;
+  outline: none;
   margin: 0 0.15rem;
   transition: var(--transition);
 }
-/*.edit-btn {
-  color: var(--clr-green-light);
-}
-.edit-btn:hover {
-  color: var(--clr-green-dark);
-}
-.delete-btn {
-  color: var(--clr-red-light);
-}
-.delete-btn:hover {
-  color: var(--clr-red-dark);
-}*/
 .checked-text{
   text-decoration: line-through;
 }
