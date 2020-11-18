@@ -173,15 +173,6 @@ function createListItem(id, value) {
   const attr = document.createAttribute('data-id');
   attr.value = id;
   element.setAttributeNode(attr);
-  /*element.innerHTML = `<p class="title">${value}</p>
-          <div class="btn-container">
-            <button type="button" class="edit-btn">
-              <img src="./img/edit-24.png">
-            </button>
-            <button type="button" class="delete-btn">
-              <img src="./img/delete-24.png">
-            </button>
-          </div>`;*/
   element.innerHTML = `<div class="btn-container">
           <button type="button" class="check-btn">
             <img src="./img/checkBox-24.png">
