@@ -45,6 +45,10 @@ function addItem(e) {
             <img src="./img/delete-24.png">
           </button>
         </div>`;
+    const deleteBtn = element.querySelector('.delete-btn');
+    const editBtn = element.querySelector('.edit-btn');
+    deleteBtn.addEventListener('click', deleteItem);
+    editBtn.addEventListener('click', editItem);
     list.appendChild(element);
     displayAlert('item added', 'success');
     container.classList.add('show-container');
@@ -53,7 +57,11 @@ function addItem(e) {
     // set back to default
     setBackToDefault();
   } else if (value && editFlag) {
-
+    editElement.innerHTML = value;
+    displayAlert('value changed', 'success');
+    // edit local storage
+    editLocalStorage(editId, value);
+    setBackToDefault();
   } else {
     displayAlert(`please enter value`, 'danger');
   }
@@ -69,6 +77,27 @@ function displayAlert(text, action) {
   }, 1000);
 }
 
+function deleteItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  const id = element.dataset.id;
+  list.removeChild(element);
+  if (list.children.length === 0) {
+    container.classList.remove('show-container');
+    displayAlert('item removed', 'danger');
+    setBackToDefault();
+    // removeFromLocalStorage(id);
+  }
+}
+
+function editItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  editElement = e.currentTarget.parentElement.previousElementSibling;
+  grocery.value = editElement.innerHTML;
+  editFlag = true;
+  editId = element.dataset.id;
+  submitBtn.textContent = 'edit';
+}
+
 function clearItems() {
   const items = document.querySelectorAll('.grocery-item');
   if (items.length > 0) {
@@ -79,7 +108,7 @@ function clearItems() {
   container.classList.remove('show-container');
   displayAlert('empty list', 'danger');
   setBackToDefault();
-  // localStorage.removeItem('list');
+  localStorage.removeItem('list');
 }
 
 function setBackToDefault() {
@@ -90,6 +119,36 @@ function setBackToDefault() {
 }
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {
-  console.log('b');
+  const grocery = { id: id, value: value };
+  let items = getLocalStorage();
+  items.push(grocery);
+  localStorage.setItem('list', JSON.stringify(items));
+}
+
+function editLocalStorage(id, value) {
+  console.log();
+}
+
+function removeFromLocalStorage(id) {
+  let items = getLocalStorage();
+  items = items.filter((item) => {
+    if (item.id !== id) {
+      return item;
+    }
+  });
+  localStorage.setItem('list', JSON.stringify(items));
+}
+
+// localStorage API
+// setItem
+// getItem
+// removeItem
+// save as strings
+// localStorage.setItem('orange', JSON.stringify(['item', 'item2']));
+// const oranges = JSON.parse(localStorage.getItem('orange'));
+// localStorage.removeItem('oranges');
+
+function getLocalStorage() {
+  return localStorage.getItem('list') ? JSON.parse(localStorage.getItem('list')) : [];
 }
 // ****** SETUP ITEMS **********
