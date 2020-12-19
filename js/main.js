@@ -63,7 +63,7 @@ function deleteItem(e) {
     container.classList.remove('show-container');
     displayAlert('item removed', 'danger');
     setBackToDefault();
-    // removeFromLocalStorage(id);
+    removeFromLocalStorage(id);
   }
 }
 
@@ -74,6 +74,11 @@ function editItem(e) {
   editFlag = true;
   editId = element.dataset.id;
   submitBtn.textContent = 'edit';
+}
+
+function checkItem(e) {
+  const element = e.currentTarget.parentElement.nextElementSibling;
+  element.classList.toggle('checked-text');
 }
 
 function clearItems() {
@@ -170,7 +175,9 @@ function createListItem(id, value) {
       </div>`;
   const deleteBtn = element.querySelector('.delete-btn');
   const editBtn = element.querySelector('.edit-btn');
+  const checkBtn = element.querySelector('.check-btn');
   deleteBtn.addEventListener('click', deleteItem);
   editBtn.addEventListener('click', editItem);
+  checkBtn.addEventListener('click', checkItem);
   list.appendChild(element);
 }
