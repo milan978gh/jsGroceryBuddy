@@ -14,6 +14,7 @@ let editId = '';
 // ****** EVENT LISTENERS **********
 form.addEventListener('submit', addItem);
 clearBtn.addEventListener('click', clearItems);
+window.addEventListener('DOMContentLoaded', setupItems);
 
 // ****** FUNCTIONS **********
 function addItem(e) {
@@ -26,30 +27,7 @@ function addItem(e) {
   // } else {}
   // kraci oblik
   if (value && !editFlag) {
-    const element = document.createElement('article');
-    element.classList.add('grocery-item');
-    const attr = document.createAttribute('data-id');
-    attr.value = id;
-    element.setAttributeNode(attr);
-    element.innerHTML = `<div class="btn-container">
-          <button type="button" class="check-btn">
-            <img src="./img/checkBox-24.png">
-          </button>
-        </div>
-        <p class="title">${value}</p>
-        <div class="btn-container">
-          <button type="button" class="edit-btn">
-            <img src="./img/edit-24.png">
-          </button>
-          <button type="button" class="delete-btn">
-            <img src="./img/delete-24.png">
-          </button>
-        </div>`;
-    const deleteBtn = element.querySelector('.delete-btn');
-    const editBtn = element.querySelector('.edit-btn');
-    deleteBtn.addEventListener('click', deleteItem);
-    editBtn.addEventListener('click', editItem);
-    list.appendChild(element);
+    createListItem(id, value);
     displayAlert('item added', 'success');
     container.classList.add('show-container');
     // add to local storage
@@ -117,6 +95,7 @@ function setBackToDefault() {
   editId = '';
   submitBtn.textContent = 'submit';
 }
+
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {
   const grocery = { id: id, value: value };
@@ -126,7 +105,14 @@ function addToLocalStorage(id, value) {
 }
 
 function editLocalStorage(id, value) {
-  console.log();
+  let items = getLocalStorage();
+  items = items.map((item) => {
+    if (item.id === id) {
+      item.value = value;
+    }
+    return item;
+  });
+  localStorage.setItem('list', JSON.stringify(items));
 }
 
 function removeFromLocalStorage(id) {
@@ -152,3 +138,39 @@ function getLocalStorage() {
   return localStorage.getItem('list') ? JSON.parse(localStorage.getItem('list')) : [];
 }
 // ****** SETUP ITEMS **********
+function setupItems() {
+  let items = getLocalStorage();
+  if (items.length > 0) {
+    items.forEach((item) => {
+      createListItem(item.id, item.value);
+    });
+    container.classList.add('show-container');
+  }
+}
+
+function createListItem(id, value) {
+  const element = document.createElement('article');
+  element.classList.add('grocery-item');
+  const attr = document.createAttribute('data-id');
+  attr.value = id;
+  element.setAttributeNode(attr);
+  element.innerHTML = `<div class="btn-container">
+        <button type="button" class="check-btn">
+          <img src="./img/checkBox-24.png">
+        </button>
+      </div>
+      <p class="title">${value}</p>
+      <div class="btn-container">
+        <button type="button" class="edit-btn">
+          <img src="./img/edit-24.png">
+        </button>
+        <button type="button" class="delete-btn">
+          <img src="./img/delete-24.png">
+        </button>
+      </div>`;
+  const deleteBtn = element.querySelector('.delete-btn');
+  const editBtn = element.querySelector('.edit-btn');
+  deleteBtn.addEventListener('click', deleteItem);
+  editBtn.addEventListener('click', editItem);
+  list.appendChild(element);
+}
